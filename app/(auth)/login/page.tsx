@@ -1,5 +1,7 @@
 import { login } from './server-actions';
 
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
   return (
     <main className="w-full max-w-sm rounded-2xl border border-white/10 bg-neutral-950/80 px-6 py-8 shadow-xl">
