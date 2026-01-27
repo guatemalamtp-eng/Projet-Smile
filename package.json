@@ -11,7 +11,9 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "prisma:seed": "node prisma/seed.js"
+    "prisma:seed": "node prisma/seed.js",
+    "create-admin": "node scripts/create-admin-production.js",
+    "generate-hash": "node scripts/generate-hash.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
