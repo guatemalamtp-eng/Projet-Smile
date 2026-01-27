@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Découvrez les œuvres de l’artiste.",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function GalleryPage() {
   const artworks = await getPublicArtworks();
