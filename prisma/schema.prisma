@@ -1,0 +1,76 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // hash bcrypt
+  name      String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artworks  Artwork[]
+  messages  Message[] @relation("UserMessages")
+  sessions  Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+model Artwork {
+  id          String         @id @default(cuid())
+  title       String
+  slug        String         @unique
+  description String?
+  widthCm     Int?
+  heightCm    Int?
+  technique   String?
+  status      ArtworkStatus  @default(AVAILABLE)
+  imageUrl    String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  likesCount  Int            @default(0)
+
+  artist      User?          @relation(fields: [artistId], references: [id])
+  artistId    String?
+
+  messages    Message[]
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  email      String
+  name       String?
+  content    String
+  createdAt  DateTime @default(now())
+
+  artwork    Artwork? @relation(fields: [artworkId], references: [id])
+  artworkId  String?
+
+  artist     User?    @relation("UserMessages", fields: [artistId], references: [id])
+  artistId   String?
+}
+
+enum ArtworkStatus {
+  AVAILABLE
+  SOLD
+}
+
+enum Role {
+  ADMIN
+}
+
