@@ -3,13 +3,15 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { verifyPassword, createSession } from '@/lib/auth';
+import { redirectWithToast } from '@/lib/toast';
 
 export async function login(formData: FormData) {
   const email = String(formData.get('email') ?? '').trim();
   const password = String(formData.get('password') ?? '');
 
   if (!email || !password) {
-    redirect('/login');
+    redirectWithToast('/login', 'Veuillez remplir tous les champs', 'error');
+    return;
   }
 
   const user = await prisma.user.findUnique({
@@ -17,12 +19,22 @@ export async function login(formData: FormData) {
   });
 
   if (!user) {
-    redirect('/login');
+    redirectWithToast(
+      '/login',
+      'Email ou mot de passe incorrect',
+      'error',
+    );
+    return;
   }
 
   const ok = await verifyPassword(password, user.password);
   if (!ok) {
-    redirect('/login');
+    redirectWithToast(
+      '/login',
+      'Email ou mot de passe incorrect',
+      'error',
+    );
+    return;
   }
 
   await createSession(user.id);

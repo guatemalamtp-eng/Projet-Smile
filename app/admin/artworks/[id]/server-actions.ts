@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { redirectWithToast } from '@/lib/toast';
 
 export async function updateArtwork(formData: FormData) {
   const user = await getCurrentUser();
@@ -20,24 +21,59 @@ export async function updateArtwork(formData: FormData) {
   const widthCmRaw = String(formData.get('widthCm') ?? '').trim();
   const heightCmRaw = String(formData.get('heightCm') ?? '').trim();
 
+  if (!title || !slug || !imageUrl) {
+    redirectWithToast(
+      `/admin/artworks/${id}`,
+      'Veuillez remplir tous les champs requis',
+      'error',
+    );
+    return;
+  }
+
+  // Vérifier si le slug existe déjà pour une autre œuvre
+  const existing = await prisma.artwork.findUnique({
+    where: { slug },
+  });
+
+  if (existing && existing.id !== id) {
+    redirectWithToast(
+      `/admin/artworks/${id}`,
+      'Ce slug existe déjà. Veuillez en choisir un autre.',
+      'error',
+    );
+    return;
+  }
+
   const widthCm = widthCmRaw ? parseInt(widthCmRaw, 10) : null;
   const heightCm = heightCmRaw ? parseInt(heightCmRaw, 10) : null;
 
-  await prisma.artwork.update({
-    where: { id },
-    data: {
-      title,
-      slug,
-      imageUrl,
-      description,
-      technique,
-      status: status === 'SOLD' ? 'SOLD' : 'AVAILABLE',
-      widthCm: widthCm ?? undefined,
-      heightCm: heightCm ?? undefined,
-    },
-  });
+  try {
+    await prisma.artwork.update({
+      where: { id },
+      data: {
+        title,
+        slug,
+        imageUrl,
+        description,
+        technique,
+        status: status === 'SOLD' ? 'SOLD' : 'AVAILABLE',
+        widthCm: widthCm ?? undefined,
+        heightCm: heightCm ?? undefined,
+      },
+    });
 
-  redirect('/admin/artworks');
+    redirectWithToast(
+      '/admin/artworks',
+      'Œuvre modifiée avec succès !',
+      'success',
+    );
+  } catch (error) {
+    redirectWithToast(
+      `/admin/artworks/${id}`,
+      'Erreur lors de la modification. Veuillez réessayer.',
+      'error',
+    );
+  }
 }
 
 export async function deleteArtwork(formData: FormData) {
@@ -48,10 +84,22 @@ export async function deleteArtwork(formData: FormData) {
 
   const id = String(formData.get('id') ?? '').trim();
 
-  await prisma.artwork.delete({
-    where: { id },
-  });
+  try {
+    await prisma.artwork.delete({
+      where: { id },
+    });
 
-  redirect('/admin/artworks');
+    redirectWithToast(
+      '/admin/artworks',
+      'Œuvre supprimée avec succès',
+      'success',
+    );
+  } catch (error) {
+    redirectWithToast(
+      '/admin/artworks',
+      'Erreur lors de la suppression. Veuillez réessayer.',
+      'error',
+    );
+  }
 }
 

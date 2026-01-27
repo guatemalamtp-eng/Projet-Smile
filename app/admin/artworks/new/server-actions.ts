@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { redirectWithToast } from '@/lib/toast';
 
 export async function createArtwork(formData: FormData) {
   const user = await getCurrentUser();
@@ -19,23 +20,58 @@ export async function createArtwork(formData: FormData) {
   const widthCmRaw = String(formData.get('widthCm') ?? '').trim();
   const heightCmRaw = String(formData.get('heightCm') ?? '').trim();
 
+  if (!title || !slug || !imageUrl) {
+    redirectWithToast(
+      '/admin/artworks/new',
+      'Veuillez remplir tous les champs requis (titre, slug, image)',
+      'error',
+    );
+    return;
+  }
+
+  // Vérifier si le slug existe déjà
+  const existing = await prisma.artwork.findUnique({
+    where: { slug },
+  });
+
+  if (existing) {
+    redirectWithToast(
+      '/admin/artworks/new',
+      'Ce slug existe déjà. Veuillez en choisir un autre.',
+      'error',
+    );
+    return;
+  }
+
   const widthCm = widthCmRaw ? parseInt(widthCmRaw, 10) : null;
   const heightCm = heightCmRaw ? parseInt(heightCmRaw, 10) : null;
 
-  await prisma.artwork.create({
-    data: {
-      title,
-      slug,
-      imageUrl,
-      description,
-      technique,
-      status: status === 'SOLD' ? 'SOLD' : 'AVAILABLE',
-      widthCm: widthCm ?? undefined,
-      heightCm: heightCm ?? undefined,
-      artistId: user.id,
-    },
-  });
+  try {
+    await prisma.artwork.create({
+      data: {
+        title,
+        slug,
+        imageUrl,
+        description,
+        technique,
+        status: status === 'SOLD' ? 'SOLD' : 'AVAILABLE',
+        widthCm: widthCm ?? undefined,
+        heightCm: heightCm ?? undefined,
+        artistId: user.id,
+      },
+    });
 
-  redirect('/admin/artworks');
+    redirectWithToast(
+      '/admin/artworks',
+      'Œuvre créée avec succès !',
+      'success',
+    );
+  } catch (error) {
+    redirectWithToast(
+      '/admin/artworks/new',
+      'Erreur lors de la création de l’œuvre. Veuillez réessayer.',
+      'error',
+    );
+  }
 }
 

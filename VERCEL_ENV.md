@@ -38,6 +38,12 @@ a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6
 
 Si tu veux changer le nom du cookie de session, tu peux définir cette variable. Sinon, elle utilisera `smile_session` par défaut.
 
+### 4. `NEXT_PUBLIC_SITE_URL`
+**Type:** Production, Preview, Development (optionnel mais recommandé)  
+**Valeur:** L'URL de ton site Vercel (ex: `https://ton-projet.vercel.app`)
+
+Utilisée pour générer le sitemap.xml. Si non définie, utilise `https://your-domain.vercel.app` par défaut.
+
 ---
 
 ## Comment les ajouter dans Vercel

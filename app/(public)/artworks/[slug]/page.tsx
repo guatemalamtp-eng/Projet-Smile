@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getArtworkBySlug } from '@/lib/artworks';
-import { likeArtwork, sendMessageForArtwork } from './server-actions';
+import { likeArtwork } from './server-actions';
+import { ContactForm } from '@/components/forms/ContactForm';
 
 type ArtworkPageProps = {
   params: { slug: string };
@@ -23,7 +24,7 @@ export async function generateMetadata(
 
   return {
     title: `${artwork.title} | Smile`,
-    description: artwork.description ?? "Œuvre originale de l’artiste.",
+    description: artwork.description ?? "Œuvre originale de l'artiste.",
     openGraph: {
       images: [
         {
@@ -44,6 +45,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
 
   const {
     id,
+    slug,
     title,
     description,
     imageUrl,
@@ -118,54 +120,19 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
           </dl>
 
           <div className="mt-2 flex flex-col gap-3 border-t border-neutral-800 pt-4">
-            <form action={async () => likeArtwork(id)}>
+            <form action={async () => likeArtwork(id, slug)}>
               <button
                 className="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white hover:bg-white/20 transition"
                 type="submit"
               >
-                ❤ J’aime cette œuvre
+                ❤ J'aime cette œuvre
               </button>
             </form>
 
-            <form
-              action={sendMessageForArtwork}
-              className="space-y-3 rounded-xl border border-white/10 bg-black/40 p-4"
-            >
-              <input type="hidden" name="artworkId" value={id} />
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-400">
-                Contacter l’artiste
-              </p>
-              <input
-                name="email"
-                type="email"
-                required
-                placeholder="Votre email"
-                className="w-full rounded-md border border-white/10 bg-black/40 px-3 py-2 text-sm outline-none ring-0 placeholder:text-neutral-500 focus:border-white/40"
-              />
-              <input
-                name="name"
-                type="text"
-                placeholder="Votre nom (facultatif)"
-                className="w-full rounded-md border border-white/10 bg-black/40 px-3 py-2 text-sm outline-none ring-0 placeholder:text-neutral-500 focus:border-white/40"
-              />
-              <textarea
-                name="content"
-                required
-                rows={4}
-                placeholder="Votre message..."
-                className="w-full rounded-md border border-white/10 bg-black/40 px-3 py-2 text-sm outline-none ring-0 placeholder:text-neutral-500 focus:border-white/40"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-semibold text-black hover:bg-neutral-200 transition"
-              >
-                Envoyer le message
-              </button>
-            </form>
+            <ContactForm artworkId={id} />
           </div>
         </section>
       </div>
     </main>
   );
 }
-

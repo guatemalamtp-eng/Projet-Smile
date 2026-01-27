@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { deleteMessage } from './server-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,6 +10,7 @@ export default async function AdminMessagesPage() {
       artwork: {
         select: {
           title: true,
+          slug: true,
         },
       },
     },
@@ -30,14 +32,34 @@ export default async function AdminMessagesPage() {
               <div className="text-xs text-neutral-400">
                 {m.name || 'Anonyme'} – {m.email}
               </div>
-              <div className="text-[11px] text-neutral-500">
-                {new Intl.DateTimeFormat('fr-FR', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                }).format(m.createdAt)}
+              <div className="flex items-center gap-3">
+                <div className="text-[11px] text-neutral-500">
+                  {new Intl.DateTimeFormat('fr-FR', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }).format(m.createdAt)}
+                </div>
+                <form action={deleteMessage}>
+                  <input type="hidden" name="id" value={m.id} />
+                  <button
+                    type="submit"
+                    className="text-[11px] text-red-400 hover:text-red-300 transition"
+                    onClick={(e) => {
+                      if (
+                        !confirm(
+                          'Êtes-vous sûr de vouloir supprimer ce message ?',
+                        )
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    Supprimer
+                  </button>
+                </form>
               </div>
             </header>
             {m.artwork && (

@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 import { getCurrentUser, destroySession } from '@/lib/auth';
+import { ToastProvider } from '@/components/ui/toast-provider';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +67,10 @@ export default async function AdminLayout({
         </header>
         <main className="px-4 py-6">{children}</main>
       </div>
+
+      <Suspense fallback={null}>
+        <ToastProvider />
+      </Suspense>
     </div>
   );
 }

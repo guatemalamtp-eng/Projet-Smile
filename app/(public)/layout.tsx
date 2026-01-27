@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { ToastProvider } from '@/components/ui/toast-provider';
 
 export default function PublicLayout({
   children,
@@ -28,6 +30,10 @@ export default function PublicLayout({
       <footer className="border-t border-white/10 py-6 text-center text-xs text-neutral-500">
         © {new Date().getFullYear()} Smile – Tous droits réservés.
       </footer>
+
+      <Suspense fallback={null}>
+        <ToastProvider />
+      </Suspense>
     </div>
   );
 }
