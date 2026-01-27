@@ -122,15 +122,29 @@ Une fois déployé, connecte-toi à ta base Neon et crée un utilisateur admin m
 npx prisma studio
 ```
 
-## 🔐 Créer un utilisateur admin
+## 🔐 Créer des utilisateurs
 
-### Option 1 : Script seed (recommandé)
+### Créer un admin
+
+#### Option 1 : Script seed (recommandé)
 
 ```bash
 npm run prisma:seed
 ```
 
-### Option 2 : Prisma Studio
+#### Option 2 : Script production
+
+```bash
+npm run create-admin
+```
+
+### Créer un client
+
+```bash
+npm run create-client "email@example.com" "mot-de-passe"
+```
+
+### Via Prisma Studio
 
 ```bash
 npx prisma studio
@@ -138,22 +152,8 @@ npx prisma studio
 
 Puis crée un utilisateur dans l'interface avec :
 - `email` : ton email
-- `password` : hash bcrypt (génère avec `node -e "console.log(require('bcryptjs').hashSync('ton_mot_de_passe', 10))"`)
-- `role` : `ADMIN`
-
-### Option 3 : Via SQL direct
-
-```sql
-INSERT INTO "User" (id, email, password, role, "createdAt", "updatedAt")
-VALUES (
-  'clx...',
-  'dasilva.jeanclaude@yahoo.fr',
-  '$2a$10$...', -- hash bcrypt de ton mot de passe (génère avec bcryptjs)
-  'ADMIN',
-  NOW(),
-  NOW()
-);
-```
+- `password` : hash bcrypt (génère avec `npm run generate-hash "ton_mot_de_passe"`)
+- `role` : `ADMIN` ou `CLIENT`
 
 ## 📝 Fonctionnalités
 
@@ -167,11 +167,17 @@ VALUES (
 
 ### Interface admin
 
-- ✅ Authentification sécurisée
+- ✅ Authentification sécurisée (`/admin/login`)
 - ✅ Dashboard avec statistiques
 - ✅ CRUD complet des œuvres
 - ✅ Gestion des messages visiteurs
 - ✅ Feedback utilisateur (toasts)
+
+### Interface client
+
+- ✅ Connexion client (`/login`)
+- ✅ Dashboard client avec statistiques
+- ✅ Accès à la galerie
 
 ## 🎨 Personnalisation
 

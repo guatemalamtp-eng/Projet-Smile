@@ -8,7 +8,7 @@ import { redirectWithToast } from '@/lib/toast';
 export async function deleteMessage(formData: FormData) {
   const user = await getCurrentUser();
   if (!user || user.role !== 'ADMIN') {
-    redirect('/login');
+    redirect('/admin/login');
   }
 
   const id = String(formData.get('id') ?? '').trim();

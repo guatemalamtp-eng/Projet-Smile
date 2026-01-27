@@ -8,7 +8,7 @@ import { redirectWithToast } from '@/lib/toast';
 export async function updateArtwork(formData: FormData) {
   const user = await getCurrentUser();
   if (!user || user.role !== 'ADMIN') {
-    redirect('/login');
+    redirect('/admin/login');
   }
 
   const id = String(formData.get('id') ?? '').trim();
@@ -79,7 +79,7 @@ export async function updateArtwork(formData: FormData) {
 export async function deleteArtwork(formData: FormData) {
   const user = await getCurrentUser();
   if (!user || user.role !== 'ADMIN') {
-    redirect('/login');
+    redirect('/admin/login');
   }
 
   const id = String(formData.get('id') ?? '').trim();

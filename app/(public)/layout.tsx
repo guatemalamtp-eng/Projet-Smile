@@ -19,7 +19,10 @@ export default function PublicLayout({
               Galerie
             </Link>
             <Link href="/#about" className="hover:text-white transition">
-              L’artiste
+              L'artiste
+            </Link>
+            <Link href="/login" className="hover:text-white transition">
+              Connexion
             </Link>
           </nav>
         </div>
@@ -37,4 +40,3 @@ export default function PublicLayout({
     </div>
   );
 }
-

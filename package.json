@@ -13,6 +13,7 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "node prisma/seed.js",
     "create-admin": "node scripts/create-admin-production.js",
+    "create-client": "node scripts/create-client.js",
     "generate-hash": "node scripts/generate-hash.js"
   },
   "prisma": {
