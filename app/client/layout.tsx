@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { getCurrentUser, destroySession } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth';
 import { ToastProvider } from '@/components/ui/toast-provider';
+import { handleClientLogout } from './logout-action';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,12 +18,6 @@ export default async function ClientLayout({
     redirect('/login');
   }
 
-  async function handleLogout() {
-    'use server';
-    await destroySession();
-    redirect('/login');
-  }
-
   return (
     <div className="flex min-h-screen flex-col bg-black text-white">
       <header className="border-b border-white/10 bg-black/80 backdrop-blur">
@@ -34,7 +29,7 @@ export default async function ClientLayout({
             <span className="text-sm text-neutral-400">
               {user.name || user.email}
             </span>
-            <form action={handleLogout}>
+            <form action={handleClientLogout}>
               <button
                 type="submit"
                 className="rounded-full border border-white/20 px-3 py-1 text-xs text-neutral-200 hover:bg-white/10 transition"
