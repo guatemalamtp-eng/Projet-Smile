@@ -1,20 +1,28 @@
-'use client';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/lib/auth';
+import AdminProtectedContent from './layout-protected';
 
-import { usePathname } from 'next/navigation';
-import AdminProtectedWrapper from './layout-protected-wrapper';
+export const dynamic = 'force-dynamic';
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') ?? '';
 
-  // Si on est sur la page de login, rendre directement sans protection
+  // Page de login : pas de protection, pas de layout admin
   if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
-  // Sinon, rendre le wrapper protégé
-  return <AdminProtectedWrapper>{children}</AdminProtectedWrapper>;
+  // Toutes les autres routes admin : vérifier l'auth
+  const user = await getCurrentUser();
+  if (!user || user.role !== 'ADMIN') {
+    redirect('/admin/login');
+  }
+
+  return <AdminProtectedContent user={user}>{children}</AdminProtectedContent>;
 }

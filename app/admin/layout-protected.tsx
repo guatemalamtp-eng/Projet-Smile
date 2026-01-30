@@ -1,22 +1,19 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import { getCurrentUser } from '@/lib/auth';
 import { ToastProvider } from '@/components/ui/toast-provider';
 import { handleAdminLogout } from './logout-action';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminProtectedContent({
-  children,
-}: {
+type AdminProtectedContentProps = {
+  user: { email: string };
   children: React.ReactNode;
-}) {
-  const user = await getCurrentUser();
+};
 
-  if (!user || user.role !== 'ADMIN') {
-    redirect('/admin/login');
-  }
+export default function AdminProtectedContent({
+  user,
+  children,
+}: AdminProtectedContentProps) {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
