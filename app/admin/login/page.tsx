@@ -1,11 +1,14 @@
 import { loginAdmin } from './server-actions';
+import { PublicHeader } from '@/components/layout/public-header';
 
 export const dynamic = 'force-dynamic';
 
 export default function AdminLoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black px-4">
-      <main className="w-full max-w-sm rounded-2xl border border-white/10 bg-neutral-950/80 px-6 py-8 shadow-xl">
+    <div className="flex min-h-screen flex-col bg-black">
+      <PublicHeader showClientLoginLink />
+      <div className="flex flex-1 items-center justify-center px-4 py-8">
+        <main className="w-full max-w-sm rounded-2xl border border-white/10 bg-neutral-950/80 px-6 py-8 shadow-xl">
         <h1 className="text-lg font-semibold tracking-tight">
           Connexion administrateur
         </h1>
@@ -45,7 +48,8 @@ export default function AdminLoginPage() {
             Se connecter
           </button>
         </form>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
