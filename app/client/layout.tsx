@@ -20,12 +20,23 @@ export default async function ClientLayout({
 
   return (
     <div className="flex min-h-screen flex-col bg-black text-white">
-      <header className="border-b border-white/10 bg-black/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link href="/client/dashboard" className="text-lg font-semibold tracking-tight">
+      <header className="border-b border-white/10 bg-black/80 backdrop-blur sticky top-0 z-10">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+          <Link href="/client/dashboard" className="text-lg font-semibold tracking-tight text-white shrink-0">
             Mon Espace
           </Link>
-          <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4 text-sm text-neutral-300">
+            <Link href="/" className="hover:text-white transition">
+              Accueil
+            </Link>
+            <Link href="/gallery" className="hover:text-white transition">
+              Galerie
+            </Link>
+            <Link href="/#about" className="hover:text-white transition">
+              L&apos;artiste
+            </Link>
+          </nav>
+          <div className="flex items-center gap-4 shrink-0">
             <span className="text-sm text-neutral-400">
               {user.name || user.email}
             </span>
