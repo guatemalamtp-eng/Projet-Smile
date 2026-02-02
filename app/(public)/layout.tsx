@@ -1,15 +1,22 @@
+import { unstable_noStore } from 'next/cache';
 import { Suspense } from 'react';
+import { getCurrentUser } from '@/lib/auth';
 import { PublicHeader } from '@/components/layout/public-header';
 import { ToastProvider } from '@/components/ui/toast-provider';
 
-export default function PublicLayout({
+export const dynamic = 'force-dynamic';
+
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  unstable_noStore();
+  const user = await getCurrentUser();
+
   return (
     <div className="flex min-h-screen flex-col">
-      <PublicHeader />
+      <PublicHeader user={user ?? undefined} />
 
       <main className="flex-1">{children}</main>
 
