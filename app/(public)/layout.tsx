@@ -20,8 +20,16 @@ export default async function PublicLayout({
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t border-white/10 py-6 text-center text-xs text-neutral-500">
-        © {new Date().getFullYear()} Smile – Tous droits réservés.
+      <footer className="border-t border-white/10 py-6">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 text-center text-xs text-neutral-500 sm:flex-row sm:gap-4">
+          <span>© {new Date().getFullYear()} Smile – Tous droits réservés.</span>
+          <a
+            href="/admin/login"
+            className="text-neutral-600 hover:text-neutral-400 transition"
+          >
+            Espace admin
+          </a>
+        </div>
       </footer>
 
       <Suspense fallback={null}>
