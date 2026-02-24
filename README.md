@@ -1,4 +1,4 @@
-# Smile - Site d'artiste peintre
+# ArtsTigenn - Site d'artiste peintre
 
 Site web pour un artiste peintre avec interface publique et interface admin.
 
@@ -183,7 +183,7 @@ Puis crée un utilisateur dans l'interface avec :
 
 - **Couleurs** : Modifie `tailwind.config.js` et les classes dans les composants
 - **Contenu** : Modifie les textes dans `app/(public)/page.tsx`
-- **Logo/Branding** : Remplace "SMILE" dans les headers
+- **Logo/Branding** : Le nom du site "ArtsTigenn" est dans le header et les métadonnées
 
 ## 🐛 Dépannage
 

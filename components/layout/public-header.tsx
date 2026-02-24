@@ -33,9 +33,12 @@ export function PublicHeader({
           href="/"
           className={`text-lg font-semibold tracking-tight ${linkClass(activeLink === 'home')}`}
         >
-          Accueil
+          ArtsTigenn
         </Link>
         <nav className="flex items-center gap-4 text-sm">
+          <Link href="/" className={linkClass(activeLink === 'home')}>
+            Accueil
+          </Link>
           <Link
             href="/gallery"
             className={linkClass(activeLink === 'gallery')}

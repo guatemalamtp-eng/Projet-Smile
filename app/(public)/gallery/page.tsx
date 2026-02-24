@@ -3,7 +3,7 @@ import { getPublicArtworks } from '@/lib/artworks';
 import { ArtworkGrid } from '@/components/gallery/ArtworkGrid';
 
 export const metadata: Metadata = {
-  title: 'Galerie | Smile',
+  title: 'Galerie | ArtsTigenn',
   description: "Découvrez les œuvres de l’artiste.",
 };
 

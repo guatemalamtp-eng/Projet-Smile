@@ -18,12 +18,12 @@ export async function generateMetadata(
 
   if (!artwork) {
     return {
-      title: 'Œuvre introuvable | Smile',
+      title: 'Œuvre introuvable | ArtsTigenn',
     };
   }
 
   return {
-    title: `${artwork.title} | Smile`,
+    title: `${artwork.title} | ArtsTigenn`,
     description: artwork.description ?? "Œuvre originale de l'artiste.",
     openGraph: {
       images: [

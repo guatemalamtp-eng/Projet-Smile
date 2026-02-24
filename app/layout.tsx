@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Smile - Artiste peintre',
-  description: "Site officiel de l’artiste peintre Smile.",
+  title: 'ArtsTigenn - Artiste peintre',
+  description: "Site officiel de l’artiste peintre ArtsTigenn.",
 };
 
 export default function RootLayout({

@@ -1,4 +1,5 @@
 import { unstable_noStore } from 'next/cache';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { getCurrentUser } from '@/lib/auth';
 import { PublicHeader } from '@/components/layout/public-header';
@@ -21,8 +22,11 @@ export default async function PublicLayout({
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-white/10 py-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 text-center text-xs text-neutral-500 sm:flex-row sm:gap-4">
-          <span>© {new Date().getFullYear()} Smile – Tous droits réservés.</span>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-2 px-4 text-center text-xs text-neutral-500">
+          <span>© {new Date().getFullYear()} ArtsTigenn – Tous droits réservés.</span>
+          <Link href="/mentions-legales" className="text-neutral-600 hover:text-neutral-400 transition">
+            Mentions légales
+          </Link>
           <a
             href="/admin/login"
             className="text-neutral-600 hover:text-neutral-400 transition"

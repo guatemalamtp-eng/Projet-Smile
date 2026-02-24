@@ -16,7 +16,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p className="text-sm leading-relaxed text-neutral-300">
-            Smile explore la frontière entre rêve et réalité à travers des
+            ArtsTigenn explore la frontière entre rêve et réalité à travers des
             toiles vibrantes. Chaque œuvre est une invitation à suspendre le
             temps et à se laisser traverser par la couleur.
           </p>
@@ -55,7 +55,7 @@ export default function HomePage() {
           L’artiste
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-neutral-300">
-          Smile est un·e artiste peintre basé·e à […]. À travers une pratique
+          ArtsTigenn est un·e artiste peintre basé·e à […]. À travers une pratique
           mêlant gestes spontanés et compositions minutieuses, il·elle explore
           les résonances intérieures de la couleur, de la lumière et de la
           texture.
