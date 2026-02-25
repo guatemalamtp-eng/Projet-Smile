@@ -7,3 +7,8 @@ export async function handleAdminLogout() {
   await destroySession();
   redirect('/admin/login');
 }
+
+export async function handleCreatorLogout() {
+  await destroySession();
+  redirect('/');
+}

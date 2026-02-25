@@ -24,9 +24,9 @@ export default async function AdminLayout({
     );
   }
 
-  // Toutes les autres routes admin : vérifier l'auth
+  // Toutes les autres routes admin : vérifier l'auth (ADMIN ou CREATOR)
   const user = await getCurrentUser();
-  if (!user || user.role !== 'ADMIN') {
+  if (!user || (user.role !== 'ADMIN' && user.role !== 'CREATOR')) {
     redirect('/admin/login');
   }
 

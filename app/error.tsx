@@ -31,6 +31,12 @@ export default function Error({
             Réessayer
           </button>
           <Link
+            href="/admin/login"
+            className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-xs font-medium text-neutral-200 hover:bg-white/5 transition"
+          >
+            Connexion admin / créateur
+          </Link>
+          <Link
             href="/"
             className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-xs font-medium text-neutral-200 hover:bg-white/5 transition"
           >

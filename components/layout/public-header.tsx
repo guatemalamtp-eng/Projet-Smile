@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { handleAdminLogout } from '@/app/admin/logout-action';
+import { handleAdminLogout, handleCreatorLogout } from '@/app/admin/logout-action';
 import { handleClientLogout } from '@/app/client/logout-action';
 
 type PublicHeaderProps = {
   /** Utilisateur connecté (optionnel) — si présent, on affiche Mon espace / Espace admin + Se déconnecter */
-  user?: { email: string; role: 'ADMIN' | 'CLIENT' };
+  user?: { email: string; role: 'ADMIN' | 'CLIENT' | 'CREATOR' };
   /** Lien actif pour le style (optionnel) */
-  activeLink?: 'home' | 'gallery' | 'artist' | 'login';
+  activeLink?: 'home' | 'gallery' | 'artist' | 'artistes' | 'services' | 'login';
   /** Afficher "Créer un compte" (page connexion client) */
   showRegisterLink?: boolean;
   /** Afficher "Connexion visiteur" vers /login (page connexion admin) */
@@ -46,6 +46,18 @@ export function PublicHeader({
             Galerie
           </Link>
           <Link
+            href="/artistes"
+            className={linkClass(activeLink === 'artistes')}
+          >
+            Artistes
+          </Link>
+          <Link
+            href="/services"
+            className={linkClass(activeLink === 'services')}
+          >
+            Services
+          </Link>
+          <Link
             href="/#about"
             className={linkClass(activeLink === 'artist')}
           >
@@ -61,15 +73,24 @@ export function PublicHeader({
                   Mon espace
                 </Link>
               )}
-              {user.role === 'ADMIN' && (
+              {(user.role === 'ADMIN' || user.role === 'CREATOR') && (
                 <Link
                   href="/admin/dashboard"
                   className="text-neutral-300 hover:text-white transition"
                 >
-                  Espace admin
+                  {user.role === 'ADMIN' ? 'Espace admin' : 'Espace créateur'}
                 </Link>
               )}
-              <form action={user.role === 'ADMIN' ? handleAdminLogout : handleClientLogout} className="inline">
+              <form
+                action={
+                  user.role === 'ADMIN'
+                    ? handleAdminLogout
+                    : user.role === 'CREATOR'
+                      ? handleCreatorLogout
+                      : handleClientLogout
+                }
+                className="inline"
+              >
                 <button
                   type="submit"
                   className="text-neutral-400 hover:text-white transition"

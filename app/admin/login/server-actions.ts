@@ -27,11 +27,11 @@ export async function loginAdmin(formData: FormData) {
     return;
   }
 
-  // Vérifier que c'est un admin
-  if (user.role !== 'ADMIN') {
+  // Vérifier que c'est un admin ou un créateur
+  if (user.role !== 'ADMIN' && user.role !== 'CREATOR') {
     redirectWithToast(
       '/admin/login',
-      'Accès réservé aux administrateurs',
+      'Accès réservé aux administrateurs et créateurs',
       'error',
     );
     return;

@@ -6,7 +6,7 @@ import { handleAdminLogout } from './logout-action';
 export const dynamic = 'force-dynamic';
 
 type AdminProtectedContentProps = {
-  user: { email: string };
+  user: { id: string; email: string; role: string };
   children: React.ReactNode;
 };
 
@@ -39,6 +39,12 @@ export default function AdminProtectedContent({
             className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
           >
             Messages
+          </Link>
+          <Link
+            href="/admin/project-requests"
+            className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
+          >
+            Demandes de projet
           </Link>
         </nav>
       </aside>
