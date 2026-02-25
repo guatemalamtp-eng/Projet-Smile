@@ -9,16 +9,16 @@ export const metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function ArtistesPage() {
+  // Tous les utilisateurs avec un profil artiste public (ex. Léa en CLIENT)
   const creators = await prisma.user.findMany({
     where: {
-      role: 'CREATOR',
       creatorProfile: { isPublic: true },
     },
     include: {
       creatorProfile: true,
       _count: { select: { artworks: true } },
     },
-    orderBy: { name: 'asc' },
+    orderBy: [{ name: 'asc' }, { email: 'asc' }],
   });
 
   return (

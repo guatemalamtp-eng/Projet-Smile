@@ -12,6 +12,7 @@ type ArtworkGridProps = {
     heightCm?: number | null;
     technique?: string | null;
     likesCount: number;
+    artist?: { id: string; name: string | null } | null;
   }[];
 };
 

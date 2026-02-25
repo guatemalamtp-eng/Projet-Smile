@@ -32,8 +32,8 @@ export default async function ClientLayout({
             <Link href="/gallery" className="hover:text-white transition">
               Galerie
             </Link>
-            <Link href="/#about" className="hover:text-white transition">
-              L&apos;artiste
+            <Link href="/artistes" className="hover:text-white transition">
+              Artistes
             </Link>
           </nav>
           <div className="flex items-center gap-4 shrink-0">

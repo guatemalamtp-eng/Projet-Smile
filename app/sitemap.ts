@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const creators = await prisma.user.findMany({
-    where: { role: 'CREATOR', creatorProfile: { isPublic: true } },
+    where: { creatorProfile: { isPublic: true } },
     select: { id: true },
   });
   const creatorUrls = creators.map((c) => ({

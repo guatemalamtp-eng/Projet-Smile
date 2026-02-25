@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +12,21 @@ export default async function ClientDashboardPage() {
     return null;
   }
 
-  // Récupérer les messages du client (avec l'œuvre liée)
+  // Œuvres du client (ex. Léa : celles créées pour elle avec artistId = user.id)
+  const myArtworks = await prisma.artwork.findMany({
+    where: { artistId: user.id },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      imageUrl: true,
+      technique: true,
+      status: true,
+    },
+  });
+
+  // Messages du client (avec l'œuvre liée)
   const [messages, messagesCount] = await Promise.all([
     prisma.message.findMany({
       where: { email: user.email },
@@ -33,6 +48,47 @@ export default async function ClientDashboardPage() {
             Votre espace client
           </p>
         </header>
+
+        {myArtworks.length > 0 && (
+          <div className="rounded-xl border border-white/10 bg-neutral-950/80 px-6 py-4">
+            <h2 className="text-sm font-semibold text-neutral-300 mb-4">
+              Mes œuvres
+            </h2>
+            <p className="text-xs text-neutral-500 mb-4">
+              Les œuvres de votre profil artiste (visibles sur la page Artistes).
+            </p>
+            <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {myArtworks.map((art) => (
+                <li key={art.id}>
+                  <Link
+                    href={`/artworks/${art.slug}`}
+                    className="block rounded-lg border border-white/10 overflow-hidden hover:border-white/20 transition"
+                  >
+                    <div className="relative aspect-square">
+                      <Image
+                        src={art.imageUrl}
+                        alt={art.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                      />
+                    </div>
+                    <p className="p-3 text-sm font-medium">{art.title}</p>
+                    <p className="px-3 pb-3 text-xs text-neutral-500">
+                      {art.technique ?? '—'}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href={`/artistes/${user.id}`}
+              className="mt-4 inline-block text-xs text-neutral-400 hover:text-white transition"
+            >
+              Voir mon profil public →
+            </Link>
+          </div>
+        )}
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-neutral-950/80 px-6 py-4">

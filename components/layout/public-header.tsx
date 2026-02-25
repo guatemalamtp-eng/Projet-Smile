@@ -57,12 +57,6 @@ export function PublicHeader({
           >
             Services
           </Link>
-          <Link
-            href="/#about"
-            className={linkClass(activeLink === 'artist')}
-          >
-            L&apos;artiste
-          </Link>
           {isLoggedIn ? (
             <>
               {user.role === 'CLIENT' && (

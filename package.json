@@ -16,6 +16,7 @@
     "create-client": "node scripts/create-client.js",
     "seed-creator": "node scripts/seed-creator.js",
     "seed-artworks-lea": "node scripts/seed-artworks-lea.js",
+    "set-lea-client": "node scripts/set-lea-client.js",
     "generate-hash": "node scripts/generate-hash.js"
   },
   "prisma": {

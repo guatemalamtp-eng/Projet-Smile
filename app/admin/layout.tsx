@@ -24,9 +24,9 @@ export default async function AdminLayout({
     );
   }
 
-  // Toutes les autres routes admin : vérifier l'auth (ADMIN ou CREATOR)
+  // Seul l’administrateur du site peut accéder à l’espace admin
   const user = await getCurrentUser();
-  if (!user || (user.role !== 'ADMIN' && user.role !== 'CREATOR')) {
+  if (!user || user.role !== 'ADMIN') {
     redirect('/admin/login');
   }
 

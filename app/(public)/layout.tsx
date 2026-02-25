@@ -2,7 +2,9 @@ import { unstable_noStore } from 'next/cache';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { getCurrentUser } from '@/lib/auth';
-import { PublicHeader } from '@/components/layout/public-header';
+import { getArtworksForBackground } from '@/lib/artworks';
+import { PublicHeaderWrapper } from '@/components/layout/PublicHeaderWrapper';
+import { ArtworkBackground } from '@/components/layout/ArtworkBackground';
 import { ToastProvider } from '@/components/ui/toast-provider';
 
 export const dynamic = 'force-dynamic';
@@ -13,11 +15,15 @@ export default async function PublicLayout({
   children: React.ReactNode;
 }) {
   unstable_noStore();
-  const user = await getCurrentUser();
+  const [user, backgroundArtworks] = await Promise.all([
+    getCurrentUser(),
+    getArtworksForBackground(6),
+  ]);
 
   return (
     <div className="flex min-h-screen flex-col">
-      <PublicHeader user={user ?? undefined} />
+      <ArtworkBackground artworks={backgroundArtworks} />
+      <PublicHeaderWrapper user={user ?? undefined} />
 
       <main className="flex-1">{children}</main>
 

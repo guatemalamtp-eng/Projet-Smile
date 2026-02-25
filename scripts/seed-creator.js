@@ -1,6 +1,6 @@
-// Seed du premier créateur + profil + services
+// Seed de l’artiste Léa Martineau (personne qui a rejoint le site, pas l’admin)
 // Usage: node scripts/seed-creator.js
-// Variables optionnelles: CREATOR_EMAIL, CREATOR_PASSWORD, CREATOR_NAME
+// Variables optionnelles: LEA_EMAIL, LEA_PASSWORD, LEA_NAME
 
 require('dotenv').config();
 
@@ -10,46 +10,60 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seed créateur (profil + services)...');
+  console.log('🌱 Seed artiste Léa Martineau (profil + services)...');
 
-  const email = process.env.CREATOR_EMAIL || 'creator@artstigenn.com';
-  const password = process.env.CREATOR_PASSWORD || 'creator1';
-  const name = process.env.CREATOR_NAME || 'Léa Martineau';
+  const email = process.env.LEA_EMAIL || process.env.CREATOR_EMAIL || 'lea.martineau@artstigenn.com';
+  const password = process.env.LEA_PASSWORD || process.env.CREATOR_PASSWORD || 'lea-artstigenn-2025';
+  const name = process.env.LEA_NAME || process.env.CREATOR_NAME || 'Léa Martineau';
 
-  // Créer ou récupérer l'utilisateur créateur
-  let creator = await prisma.user.findFirst({
+  // Migration : si l’ancien compte "creator@artstigenn.com" existe, le renommer en Léa
+  const oldCreator = await prisma.user.findFirst({
+    where: { email: 'creator@artstigenn.com' },
+  });
+  if (oldCreator && email !== 'creator@artstigenn.com') {
+    const existingNew = await prisma.user.findUnique({ where: { email } });
+    if (!existingNew) {
+      await prisma.user.update({
+        where: { id: oldCreator.id },
+        data: { email, name, role: 'CLIENT' },
+      });
+      console.log('✅ Ancien compte creator@artstigenn.com renommé en ' + email);
+    }
+  }
+
+  // Créer ou récupérer l'utilisateur créateur (Léa)
+  let lea = await prisma.user.findFirst({
     where: { email },
     include: { creatorProfile: true },
   });
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  if (!creator) {
-    creator = await prisma.user.create({
+  if (!lea) {
+    lea = await prisma.user.create({
       data: {
         email,
         password: passwordHash,
         name,
-        role: 'CREATOR',
+        role: 'CLIENT',
       },
       include: { creatorProfile: true },
     });
-    console.log('✅ Compte créateur créé.');
-    console.log(`   Email: ${creator.email}`);
+    console.log('✅ Compte client Léa créé.');
+    console.log(`   Email: ${lea.email}`);
     console.log(`   Mot de passe: ${password}`);
   } else {
-    // Mettre à jour le rôle et le mot de passe au cas où (ex. ancien compte)
     await prisma.user.update({
-      where: { id: creator.id },
-      data: { role: 'CREATOR', password: passwordHash, name },
+      where: { id: lea.id },
+      data: { role: 'CLIENT', password: passwordHash, name },
     });
-    creator = await prisma.user.findUnique({
-      where: { id: creator.id },
+    lea = await prisma.user.findUnique({
+      where: { id: lea.id },
       include: { creatorProfile: true },
     });
-    if (!creator) throw new Error('Utilisateur introuvable après mise à jour');
-    console.log('✅ Compte créateur existant mis à jour (mot de passe réinitialisé).');
-    console.log(`   Email: ${creator.email}`);
+    if (!lea) throw new Error('Utilisateur introuvable après mise à jour');
+    console.log('✅ Compte Léa mis à jour (rôle client).');
+    console.log(`   Email: ${lea.email}`);
     console.log(`   Mot de passe: ${password}`);
   }
 
@@ -63,43 +77,26 @@ async function main() {
     videoUrl: null,
     galleryUrls: [],
   };
-  if (!creator.creatorProfile) {
+  if (!lea.creatorProfile) {
     await prisma.creatorProfile.create({
-      data: { userId: creator.id, ...profileData },
+      data: { userId: lea.id, ...profileData },
     });
     console.log('✅ Profil créateur créé (Léa Martineau, avatar blonde, visible sur /artistes).');
   } else {
     await prisma.creatorProfile.update({
-      where: { userId: creator.id },
+      where: { userId: lea.id },
       data: { ...profileData },
     });
     console.log('✅ Profil créateur mis à jour (avatar et bio).');
   }
 
-  // Créer 2 services par défaut s'ils n'existent pas
-  const defaultServices = [
-    { name: 'Peinture sur commande', slug: 'peinture-sur-commande', description: 'Œuvre unique réalisée selon vos envies : format, thème, couleurs. Idéal pour un intérieur ou un cadeau.' },
-    { name: 'Projet artistique sur mesure', slug: 'projet-artistique-sur-mesure', description: 'Projet personnalisé : série d\'œuvres, collaboration, décoration murale ou événementiel.' },
-  ];
+  // Pas de services pour Léa (rubrique client)
 
-  for (const s of defaultServices) {
-    const existing = await prisma.service.findUnique({ where: { slug: s.slug } });
-    if (!existing) {
-      await prisma.service.create({
-        data: {
-          ...s,
-          creatorId: creator.id,
-        },
-      });
-      console.log(`✅ Service créé : ${s.name}`);
-    }
-  }
 
   console.log('');
-  console.log('🎉 Seed créateur terminé. Tu peux :');
-  console.log('   - Aller sur /artistes pour voir le créateur');
-  console.log('   - Aller sur /services pour voir les services');
-  console.log('   - Te connecter en créateur : /admin/login avec ' + email);
+  console.log('🎉 Seed Léa terminé (rubrique client).');
+  console.log('   - Aller sur /artistes pour voir Léa');
+  console.log('   - Te connecter en tant qu’artiste (Léa) : /admin/login avec ' + email);
 }
 
 main()

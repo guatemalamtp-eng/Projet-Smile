@@ -1,11 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getFeaturedArtworkOfTheDay } from '@/lib/artworks';
+import { prisma } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const featured = await getFeaturedArtworkOfTheDay();
+  const [featured, artists] = await Promise.all([
+    getFeaturedArtworkOfTheDay(),
+    prisma.user.findMany({
+      where: { creatorProfile: { isPublic: true } },
+      include: {
+        creatorProfile: true,
+        _count: { select: { artworks: true } },
+      },
+      orderBy: [{ name: 'asc' }, { email: 'asc' }],
+    }),
+  ]);
 
   return (
     <div className="relative isolate overflow-hidden bg-gradient-to-b from-black via-neutral-950 to-black">
@@ -34,12 +45,12 @@ export default async function HomePage() {
             >
               Découvrir la galerie
             </Link>
-            <a
-              href="#about"
+            <Link
+              href="/artistes"
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2 text-xs font-medium text-neutral-200 hover:bg-white/5 transition"
             >
-              En savoir plus
-            </a>
+              Découvrir les artistes
+            </Link>
           </div>
         </div>
 
@@ -79,18 +90,62 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {artists.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 pb-16 pt-8 md:pb-24">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">
+            Artistes à découvrir
+          </h2>
+          <p className="mt-2 text-sm text-neutral-500">
+            Découvrez les artistes et créateurs de la plateforme.
+          </p>
+          <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {artists.map((creator) => (
+              <li key={creator.id}>
+                <Link
+                  href={`/artistes/${creator.id}`}
+                  className="block rounded-xl border border-white/10 bg-neutral-950/80 p-6 transition hover:border-white/20"
+                >
+                  {creator.creatorProfile?.avatarUrl ? (
+                    <img
+                      src={creator.creatorProfile.avatarUrl.startsWith('http') ? creator.creatorProfile.avatarUrl : creator.creatorProfile.avatarUrl}
+                      alt=""
+                      className="mb-4 aspect-square w-full rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="mb-4 aspect-square w-full rounded-lg bg-white/5 flex items-center justify-center text-4xl text-neutral-600">
+                      {creator.name?.[0] ?? creator.email[0].toUpperCase()}
+                    </div>
+                  )}
+                  <h3 className="font-semibold text-white">
+                    {creator.name || creator.email}
+                  </h3>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    {creator._count.artworks} œuvre{creator._count.artworks !== 1 ? 's' : ''}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/artistes"
+            className="mt-6 inline-block text-sm text-neutral-400 hover:text-white transition"
+          >
+            Voir tous les artistes →
+          </Link>
+        </section>
+      )}
+
       <section
         id="about"
         className="mx-auto max-w-4xl px-4 pb-16 pt-4 md:pb-24"
       >
         <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">
-          L’artiste
+          La plateforme
         </h2>
         <p className="mt-4 text-sm leading-relaxed text-neutral-300">
-          ArtsTigenn est un·e artiste peintre basé·e à […]. À travers une pratique
-          mêlant gestes spontanés et compositions minutieuses, il·elle explore
-          les résonances intérieures de la couleur, de la lumière et de la
-          texture.
+          ArtsTigenn met en lumière artistes et artisans, connus ou à découvrir.
+          Peinture, sculpture, projets sur commande : explorez les œuvres et
+          contactez les créateurs pour vos projets.
         </p>
       </section>
     </div>

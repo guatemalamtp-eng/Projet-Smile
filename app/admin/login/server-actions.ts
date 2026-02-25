@@ -27,11 +27,11 @@ export async function loginAdmin(formData: FormData) {
     return;
   }
 
-  // Vérifier que c'est un admin ou un créateur
-  if (user.role !== 'ADMIN' && user.role !== 'CREATOR') {
+  // Seul l'administrateur (toi) peut se connecter ici. Les artistes/clients utilisent /login
+  if (user.role !== 'ADMIN') {
     redirectWithToast(
       '/admin/login',
-      'Accès réservé aux administrateurs et créateurs',
+      'Accès réservé à l’administrateur du site. Pour un espace client, utilisez la page Connexion.',
       'error',
     );
     return;

@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getArtworkBySlug } from '@/lib/artworks';
 import { likeArtwork } from './server-actions';
@@ -81,6 +82,16 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
 
         <section className="flex flex-col gap-6">
           <header>
+            {artwork.artist && (
+              <p className="mb-2 text-sm text-neutral-400">
+                <Link
+                  href={`/artistes/${artwork.artist.id}`}
+                  className="hover:text-white transition"
+                >
+                  ← {artwork.artist.name ?? 'Voir l’artiste'}
+                </Link>
+              </p>
+            )}
             <h1 className="text-2xl font-semibold tracking-tight text-white">
               {title}
             </h1>
