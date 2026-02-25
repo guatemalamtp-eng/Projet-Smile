@@ -37,6 +37,32 @@ export default async function AdminProfilePage() {
           />
         </div>
         <div>
+          <label htmlFor="videoUrl" className="block text-sm font-medium text-neutral-300">
+            URL vidéo (YouTube, Vimeo ou lien direct)
+          </label>
+          <input
+            id="videoUrl"
+            name="videoUrl"
+            type="url"
+            defaultValue={profile?.videoUrl ?? ''}
+            placeholder="https://..."
+            className="mt-1 w-full rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-white/40"
+          />
+        </div>
+        <div>
+          <label htmlFor="galleryUrls" className="block text-sm font-medium text-neutral-300">
+            Galerie (une URL d&apos;image par ligne)
+          </label>
+          <textarea
+            id="galleryUrls"
+            name="galleryUrls"
+            rows={4}
+            defaultValue={profile?.galleryUrls?.join('\n') ?? ''}
+            placeholder="https://...&#10;https://..."
+            className="mt-1 w-full rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-white/40"
+          />
+        </div>
+        <div>
           <label htmlFor="bio" className="block text-sm font-medium text-neutral-300">
             Bio
           </label>

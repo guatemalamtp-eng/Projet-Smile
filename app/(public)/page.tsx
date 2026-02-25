@@ -1,6 +1,12 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import { getFeaturedArtworkOfTheDay } from '@/lib/artworks';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const featured = await getFeaturedArtworkOfTheDay();
+
   return (
     <div className="relative isolate overflow-hidden bg-gradient-to-b from-black via-neutral-950 to-black">
       <div className="mx-auto flex min-h-[80vh] max-w-6xl flex-col-reverse items-center gap-10 px-4 py-16 md:flex-row md:py-24">
@@ -37,13 +43,39 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative h-[320px] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/60 shadow-[0_0_80px_rgba(56,189,248,0.25)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,#22d3ee33,transparent),radial-gradient(circle_at_100%_100%,#f472b633,transparent)]" />
-          <div className="relative flex h-full items-center justify-center">
-            <span className="text-[11px] uppercase tracking-[0.3em] text-neutral-200">
-              Une toile, une histoire
-            </span>
-          </div>
+        <div className="relative h-[320px] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/60 shadow-[0_0_80px_rgba(56,189,248,0.15)]">
+          {featured ? (
+            <Link
+              href={`/artworks/${featured.slug}`}
+              className="block h-full w-full"
+            >
+              <Image
+                src={featured.imageUrl}
+                alt={featured.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 384px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <p className="text-sm font-medium text-white">{featured.title}</p>
+                {featured.artist?.name && (
+                  <p className="text-xs text-neutral-300">
+                    {featured.artist.name}
+                  </p>
+                )}
+              </div>
+            </Link>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,#22d3ee33,transparent),radial-gradient(circle_at_100%_100%,#f472b633,transparent)]" />
+              <div className="relative flex h-full items-center justify-center">
+                <span className="text-[11px] uppercase tracking-[0.3em] text-neutral-200">
+                  Une toile, une histoire
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

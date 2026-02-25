@@ -1,5 +1,23 @@
 import { prisma } from './prisma';
 
+/** Œuvre mise en avant du jour (rotation automatique : change chaque jour) */
+export async function getFeaturedArtworkOfTheDay() {
+  const artworks = await prisma.artwork.findMany({
+    where: { status: 'AVAILABLE' },
+    orderBy: { id: 'asc' },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      imageUrl: true,
+      artist: { select: { id: true, name: true } },
+    },
+  });
+  if (artworks.length === 0) return null;
+  const dayIndex = Math.floor(Date.now() / (24 * 60 * 60 * 1000)) % artworks.length;
+  return artworks[dayIndex];
+}
+
 export async function getPublicArtworks() {
   return prisma.artwork.findMany({
     orderBy: { createdAt: 'desc' },

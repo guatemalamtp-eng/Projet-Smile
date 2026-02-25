@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { updateProjectRequestStatus } from './server-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,19 +51,25 @@ export default async function AdminProjectRequestsPage() {
                     minute: '2-digit',
                   })}
                 </span>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-xs ${
-                    req.status === 'NEW'
-                      ? 'bg-amber-500/20 text-amber-400'
-                      : req.status === 'ACCEPTED'
-                        ? 'bg-green-500/20 text-green-400'
-                        : req.status === 'REFUSED'
-                          ? 'bg-red-500/20 text-red-400'
-                          : 'bg-neutral-500/20 text-neutral-400'
-                  }`}
-                >
-                  {statusLabel[req.status] ?? req.status}
-                </span>
+                <form action={updateProjectRequestStatus} className="flex items-center gap-2">
+                  <input type="hidden" name="id" value={req.id} />
+                  <select
+                    name="status"
+                    defaultValue={req.status}
+                    className="rounded border border-white/20 bg-black/40 px-2 py-1 text-xs text-white outline-none focus:border-white/40"
+                  >
+                    <option value="NEW">Nouvelle</option>
+                    <option value="IN_PROGRESS">En cours</option>
+                    <option value="ACCEPTED">Acceptée</option>
+                    <option value="REFUSED">Refusée</option>
+                  </select>
+                  <button
+                    type="submit"
+                    className="rounded border border-white/20 px-2 py-1 text-xs text-neutral-300 hover:bg-white/10 transition"
+                  >
+                    Mettre à jour
+                  </button>
+                </form>
               </div>
               {user.role === 'ADMIN' && (
                 <p className="mt-2 text-xs text-neutral-500">

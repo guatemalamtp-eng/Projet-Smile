@@ -14,25 +14,27 @@ export async function updateCreatorProfile(formData: FormData) {
 
   const bio = String(formData.get('bio') ?? '').trim() || null;
   const avatarUrl = String(formData.get('avatarUrl') ?? '').trim() || null;
+  const videoUrl = String(formData.get('videoUrl') ?? '').trim() || null;
+  const galleryRaw = String(formData.get('galleryUrls') ?? '').trim();
+  const galleryUrls = galleryRaw
+    ? galleryRaw.split(/\r?\n/).map((u) => u.trim()).filter(Boolean)
+    : [];
   const isPublic = formData.get('isPublic') === 'on';
 
   const existing = await prisma.creatorProfile.findUnique({
     where: { userId: user.id },
   });
 
+  const data = { bio, avatarUrl, videoUrl, galleryUrls, isPublic };
+
   if (existing) {
     await prisma.creatorProfile.update({
       where: { userId: user.id },
-      data: { bio, avatarUrl, isPublic },
+      data,
     });
   } else {
     await prisma.creatorProfile.create({
-      data: {
-        userId: user.id,
-        bio,
-        avatarUrl,
-        isPublic,
-      },
+      data: { userId: user.id, ...data },
     });
   }
 

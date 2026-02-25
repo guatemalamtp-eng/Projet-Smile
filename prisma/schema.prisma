@@ -69,12 +69,14 @@ model Message {
 }
 
 model CreatorProfile {
-  id        String   @id @default(cuid())
-  bio       String?  @db.Text
-  avatarUrl String?
-  isPublic  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  bio         String?  @db.Text
+  avatarUrl   String?
+  videoUrl    String?
+  galleryUrls String[] @default([])
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique

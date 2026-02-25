@@ -53,23 +53,27 @@ async function main() {
     console.log(`   Mot de passe: ${password}`);
   }
 
-  // Créer ou mettre à jour le profil (artiste fictif inspiré d'un profil crédible)
+  // Créer ou mettre à jour le profil (artiste fictif : Léa Martineau, visage blonde)
   const bio = `Peintre abstraite née à Lyon, Léa Martineau vit et travaille à Paris. Son travail explore la frontière entre lumière et matière à travers des couches de peinture et de glacis. Diplômée des Beaux-Arts de Lyon, elle expose en France et à l'étranger depuis une quinzaine d'années. Ses œuvres figurent dans des collections privées en Europe. Elle accepte les commandes et projets sur mesure pour particuliers et professionnels.`;
+  const avatarUrl = '/avatars/lea-martineau.jpg';
+  const profileData = {
+    bio,
+    avatarUrl,
+    isPublic: true,
+    videoUrl: null,
+    galleryUrls: [],
+  };
   if (!creator.creatorProfile) {
     await prisma.creatorProfile.create({
-      data: {
-        userId: creator.id,
-        bio,
-        isPublic: true,
-      },
+      data: { userId: creator.id, ...profileData },
     });
-    console.log('✅ Profil créateur créé (Léa Martineau, visible sur /artistes).');
+    console.log('✅ Profil créateur créé (Léa Martineau, avatar blonde, visible sur /artistes).');
   } else {
     await prisma.creatorProfile.update({
       where: { userId: creator.id },
-      data: { bio, isPublic: true },
+      data: { ...profileData },
     });
-    console.log('✅ Profil créateur mis à jour.');
+    console.log('✅ Profil créateur mis à jour (avatar et bio).');
   }
 
   // Créer 2 services par défaut s'ils n'existent pas
