@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { updateService } from '../server-actions';
+import { updateService } from '../../server-actions';
 
 export const dynamic = 'force-dynamic';
 
