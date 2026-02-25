@@ -28,18 +28,38 @@ export default function AdminProtectedContent({
           >
             Dashboard
           </Link>
-          <Link
-            href="/admin/artworks"
-            className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
-          >
-            Œuvres
-          </Link>
-          <Link
-            href="/admin/messages"
-            className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
-          >
-            Messages
-          </Link>
+          {user.role === 'CREATOR' && (
+            <>
+              <Link
+                href="/admin/profile"
+                className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
+              >
+                Mon profil
+              </Link>
+              <Link
+                href="/admin/services"
+                className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
+              >
+                Mes services
+              </Link>
+            </>
+          )}
+          {user.role === 'ADMIN' && (
+            <>
+              <Link
+                href="/admin/artworks"
+                className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
+              >
+                Œuvres
+              </Link>
+              <Link
+                href="/admin/messages"
+                className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
+              >
+                Messages
+              </Link>
+            </>
+          )}
           <Link
             href="/admin/project-requests"
             className="block rounded-md px-3 py-2 text-neutral-300 hover:bg-white/10"
