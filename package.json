@@ -15,6 +15,7 @@
     "create-admin": "node scripts/create-admin-production.js",
     "create-client": "node scripts/create-client.js",
     "seed-creator": "node scripts/seed-creator.js",
+    "seed-artworks-lea": "node scripts/seed-artworks-lea.js",
     "generate-hash": "node scripts/generate-hash.js"
   },
   "prisma": {
