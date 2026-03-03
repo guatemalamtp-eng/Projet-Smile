@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getFeaturedArtworkOfTheDay } from '@/lib/artworks';
 import { prisma } from '@/lib/prisma';
 
@@ -60,12 +59,10 @@ export default async function HomePage() {
               href={`/artworks/${featured.slug}`}
               className="block h-full w-full"
             >
-              <Image
+              <img
                 src={featured.imageUrl}
                 alt={featured.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 384px"
+                className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">

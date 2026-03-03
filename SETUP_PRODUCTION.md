@@ -54,7 +54,7 @@ npm run create-client "client@test.com" "motdepasse123"
 Dans **Vercel > Settings > Environment Variables**, assure-toi d'avoir :
 
 - ✅ `DATABASE_URL` : URL de ta base Neon (production)
-- ✅ `AUTH_SECRET` : `bcad126ea1bcb988f544b7c1d5b2b118`
+- ✅ `AUTH_SECRET` : une clé aléatoire (génère avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
 - ✅ `NEXT_PUBLIC_SITE_URL` : URL de ton site Vercel
 
 ---

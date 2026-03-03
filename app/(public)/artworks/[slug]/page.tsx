@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { getArtworkBySlug } from '@/lib/artworks';
@@ -7,7 +6,7 @@ import { likeArtwork } from './server-actions';
 import { ContactForm } from '@/components/forms/ContactForm';
 
 type ArtworkPageProps = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +14,8 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata(
   { params }: ArtworkPageProps,
 ): Promise<Metadata> {
-  const artwork = await getArtworkBySlug(params.slug);
+  const { slug } = await params;
+  const artwork = await getArtworkBySlug(slug);
 
   if (!artwork) {
     return {
@@ -38,7 +38,8 @@ export async function generateMetadata(
 }
 
 export default async function ArtworkPage({ params }: ArtworkPageProps) {
-  const artwork = await getArtworkBySlug(params.slug);
+  const { slug } = await params;
+  const artwork = await getArtworkBySlug(slug);
 
   if (!artwork) {
     notFound();
@@ -46,7 +47,6 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
 
   const {
     id,
-    slug,
     title,
     description,
     imageUrl,
@@ -64,14 +64,12 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     <main className="mx-auto max-w-5xl px-4 py-10">
       <div className="grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-neutral-950/60">
-          <Image
+          <img
             src={imageUrl}
             alt={title}
-            fill
-            className={`object-contain ${
+            className={`h-full w-full object-contain ${
               isSold ? 'grayscale' : ''
             }`}
-            sizes="(min-width: 1024px) 60vw, 100vw"
           />
           {isSold && (
             <span className="absolute left-4 top-4 rounded-full bg-red-600/90 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
@@ -131,7 +129,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
           </dl>
 
           <div className="mt-2 flex flex-col gap-3 border-t border-neutral-800 pt-4">
-            <form action={async () => likeArtwork(id, slug)}>
+            <form action={async () => likeArtwork(id, artwork.slug)}>
               <button
                 className="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white hover:bg-white/20 transition"
                 type="submit"

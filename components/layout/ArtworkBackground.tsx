@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 type ArtworkForBg = {
   id: string;
@@ -37,13 +36,10 @@ export function ArtworkBackground({ artworks }: { artworks: ArtworkForBg[] }) {
             opacity: i === index ? 0.22 : 0,
           }}
         >
-          <Image
+          <img
             src={art.imageUrl}
             alt=""
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority={i === 0}
+            className="h-full w-full object-cover"
           />
         </div>
       ))}

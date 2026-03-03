@@ -126,10 +126,14 @@ async function main() {
 
   const profileData = {
     bio: "Peintre abstraite née à Lyon, Léa Martineau vit et travaille à Paris. Son travail explore la frontière entre lumière et matière à travers des couches de peinture et de glacis. Diplômée des Beaux-Arts de Lyon, elle expose en France et à l'étranger depuis une quinzaine d'années. Ses œuvres figurent dans des collections privées en Europe.",
-    avatarUrl: '/avatars/lea-martineau.jpg',
+    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     isPublic: true,
     videoUrl: null,
-    galleryUrls: [],
+    galleryUrls: [
+      'https://images.unsplash.com/photo-1549887534-1541e9326642?w=600&q=80',
+      'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80',
+      'https://images.unsplash.com/photo-1563089145-599997674d42?w=600&q=80',
+    ],
   };
 
   if (!lea.creatorProfile) {

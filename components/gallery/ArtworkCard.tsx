@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import type { ArtworkStatus } from '@prisma/client';
+import { useState } from 'react';
 
 type ArtworkCardProps = {
   slug: string;
@@ -29,6 +29,7 @@ export function ArtworkCard(props: ArtworkCardProps) {
     artist,
   } = props;
 
+  const [imgError, setImgError] = useState(false);
   const isSold = status === 'SOLD';
 
   return (
@@ -37,16 +38,21 @@ export function ArtworkCard(props: ArtworkCardProps) {
         href={`/artworks/${slug}`}
         className="group block"
       >
-        <div className="relative aspect-[4/5] w-full overflow-hidden">
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            className={`object-cover transition duration-500 group-hover:scale-105 ${
-              isSold ? 'grayscale' : ''
-            }`}
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-          />
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-900/60">
+          {!imgError && imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={title}
+              className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
+                isSold ? 'grayscale' : ''
+              }`}
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-neutral-500 text-sm">
+              Œuvre
+            </div>
+          )}
 
           {isSold && (
             <span className="absolute left-3 top-3 rounded-full bg-red-600/90 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">

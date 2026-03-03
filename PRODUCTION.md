@@ -7,7 +7,7 @@
 Dans **Vercel > Settings > Environment Variables**, configure :
 
 - `DATABASE_URL` : Ton URL Neon PostgreSQL
-- `AUTH_SECRET` : `bcad126ea1bcb988f544b7c1d5b2b118`
+- `AUTH_SECRET` : une clé aléatoire (génère avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
 - `AUTH_COOKIE_NAME` : `smile_session` (optionnel)
 - `NEXT_PUBLIC_SITE_URL` : L'URL de ton site Vercel (ex: `https://ton-projet.vercel.app`)
 

@@ -11,10 +11,11 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
-type Props = { searchParams: Promise<{ artist?: string }> };
+type Props = { searchParams: Promise<{ artist?: string }> | { artist?: string } };
 
 export default async function GalleryPage({ searchParams }: Props) {
-  const { artist: artistId } = await searchParams;
+  const resolved = await (Promise.resolve(searchParams));
+  const artistId = resolved?.artist;
   const artworks = await getPublicArtworks(artistId || undefined);
 
   let artistName: string | null = null;

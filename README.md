@@ -38,7 +38,7 @@ Crée un fichier `.env` à la racine :
 ```env
 DATABASE_URL="postgresql://user:password@host:port/database?sslmode=require"
 AUTH_COOKIE_NAME="smile_session"
-AUTH_SECRET="une_chaine_longue_et_aleatoire"
+# AUTH_SECRET (optionnel) : non utilisé par l'auth actuelle (sessions en BDD). Tu peux le définir pour Vercel ou un usage futur.
 ```
 
 ### 4. Créer la base de données
@@ -195,7 +195,7 @@ Vérifie que la variable est bien configurée dans `.env` (local) ou dans Vercel
 
 Assure-toi que :
 1. `DATABASE_URL` est configurée dans Vercel
-2. `AUTH_SECRET` est configurée
+2. `AUTH_SECRET` (optionnel) : l'app n'en a pas besoin pour l'auth actuelle ; tu peux en mettre une pour cohérence (génère avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`)
 3. Les migrations Prisma sont appliquées
 
 ### Impossible de se connecter

@@ -18,7 +18,7 @@ L'erreur `DEPLOYMENT_NOT_FOUND` signifie que Vercel ne trouve pas de déploiemen
 4. **Importe le repo** : `guatemalamtp-eng/Projet-Smile`
 5. **Configure les variables d'environnement** :
    - `DATABASE_URL` : Ton URL Neon PostgreSQL
-   - `AUTH_SECRET` : `bcad126ea1bcb988f544b7c1d5b2b118`
+   - `AUTH_SECRET` : génère une clé avec `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
    - `NEXT_PUBLIC_SITE_URL` : Sera rempli automatiquement après le premier déploiement
 6. **Clique sur "Deploy"**
 

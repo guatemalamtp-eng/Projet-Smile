@@ -14,9 +14,9 @@ postgresql://neondb_owner:TON_MOT_DE_PASSE@ep-snowy-sun-ageifnrm-pooler.c-2.eu-c
 
 ⚠️ Remplace `TON_MOT_DE_PASSE` par ton vrai mot de passe Neon.
 
-### 2. `AUTH_SECRET`
+### 2. `AUTH_SECRET` (optionnel)
 **Type:** Production, Preview, Development  
-**Valeur:** Une chaîne aléatoire longue et sécurisée (minimum 32 caractères)
+**Valeur:** Une chaîne aléatoire longue et sécurisée (minimum 32 caractères). Non utilisée par l’auth actuelle (sessions en BDD) ; utile pour cohérence ou usage futur.
 
 Tu peux générer une clé avec cette commande :
 ```bash
