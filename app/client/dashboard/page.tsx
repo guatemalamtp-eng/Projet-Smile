@@ -1,7 +1,6 @@
 import { getCurrentUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export const dynamic = 'force-dynamic';
 
@@ -64,13 +63,12 @@ export default async function ClientDashboardPage() {
                     href={`/artworks/${art.slug}`}
                     className="block rounded-lg border border-white/10 overflow-hidden hover:border-white/20 transition"
                   >
-                    <div className="relative aspect-square">
-                      <Image
+                    <div className="relative aspect-square bg-neutral-900/60 overflow-hidden">
+                      <img
                         src={art.imageUrl}
                         alt={art.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, 33vw"
+                        className="h-full w-full object-cover"
+                        loading="lazy"
                       />
                     </div>
                     <p className="p-3 text-sm font-medium">{art.title}</p>

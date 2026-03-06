@@ -31,7 +31,7 @@ export function ArtworkBackground({ artworks }: { artworks: ArtworkForBg[] }) {
       {artworks.map((art, i) => (
         <div
           key={art.id}
-          className="absolute inset-0 transition-opacity duration-[1500ms]"
+          className="absolute inset-0 bg-neutral-950 transition-opacity duration-[1500ms]"
           style={{
             opacity: i === index ? 0.22 : 0,
           }}
@@ -40,6 +40,7 @@ export function ArtworkBackground({ artworks }: { artworks: ArtworkForBg[] }) {
             src={art.imageUrl}
             alt=""
             className="h-full w-full object-cover"
+            loading={i === 0 ? 'eager' : 'lazy'}
           />
         </div>
       ))}

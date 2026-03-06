@@ -70,6 +70,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
             className={`h-full w-full object-contain ${
               isSold ? 'grayscale' : ''
             }`}
+            loading="eager"
           />
           {isSold && (
             <span className="absolute left-4 top-4 rounded-full bg-red-600/90 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">

@@ -57,12 +57,13 @@ export default async function HomePage() {
           {featured ? (
             <Link
               href={`/artworks/${featured.slug}`}
-              className="block h-full w-full"
+              className="block h-full w-full bg-neutral-900/60"
             >
               <img
                 src={featured.imageUrl}
                 alt={featured.title}
                 className="h-full w-full object-cover"
+                loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-4">
