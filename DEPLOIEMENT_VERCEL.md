@@ -28,25 +28,36 @@ Suivre **exactement** ces étapes. Tout se fait sur Vercel et GitHub, plus besoi
 
 ---
 
-## 3. Variables d’environnement (obligatoire)
+## 3. Neon : base de données
 
-Tu dois avoir une **base PostgreSQL sur Neon** (https://console.neon.tech). Si ce n’est pas fait : crée un projet, une base, et récupère l’URL de connexion.
+1. Va sur **https://console.neon.tech** et connecte-toi.
+2. Crée un **projet** (ou utilise un existant) et une **base**.
+3. Dans le projet, ouvre **Connection details** / **Connection string**.
+4. Choisis **Pooled connection** (obligatoire pour Vercel, évite les coupures). L’URL ressemble à :
+   ```
+   postgresql://USER:PASSWORD@ep-XXX-pooler.REGION.aws.neon.tech/neondb?sslmode=require
+   ```
+5. Copie cette URL : c’est ta **DATABASE_URL**.
+
+---
+
+## 4. Variables d’environnement Vercel
 
 Dans la page de configuration du projet Vercel, section **Environment Variables** :
 
 | Nom | Valeur | Environnement |
 |-----|--------|----------------|
-| `DATABASE_URL` | Ton URL Neon PostgreSQL (ex: `postgresql://user:motdepasse@ep-xxx.neon.tech/neondb?sslmode=require`) | Production, Preview, Development |
-| `NEXT_PUBLIC_SITE_URL` | L’URL du site une fois déployé (ex: `https://projet-smile.vercel.app`) | Production (optionnel mais recommandé) |
+| `DATABASE_URL` | L’URL **pooled** Neon copiée ci-dessus | Production, Preview, Development |
+| `NEXT_PUBLIC_SITE_URL` | L’URL du site (ex: `https://ton-projet.vercel.app`) | Production (recommandé) |
 
-- **DATABASE_URL** : dans Neon → ton projet → **Connection string** (avec mot de passe). Utilise bien l’URL « pooled » si proposée.
-- **AUTH_SECRET** : pas obligatoire pour l’auth actuelle ; tu peux en ajouter une plus tard si tu veux.
+- **DATABASE_URL** : obligatoire. Sans elle, le build (migrations) et le site échouent.
+- **AUTH_SECRET** : optionnel.
 
 Clique sur **Save** pour chaque variable, puis **Deploy**.
 
 ---
 
-## 4. Premier déploiement
+## 5. Premier déploiement
 
 1. Clique sur **Deploy**.
 2. Attends la fin du build (1 à 3 min). Si une erreur s’affiche, note le message exact.
@@ -54,7 +65,7 @@ Clique sur **Save** pour chaque variable, puis **Deploy**.
 
 ---
 
-## 5. Remplir la base de données (admin + Léa + œuvres)
+## 6. Remplir la base de données (Neon) (admin + Léa + œuvres)
 
 Le site tourne mais la base est vide. Il faut exécuter le **seed** **une fois** avec la base **Neon de production**.
 
@@ -77,7 +88,7 @@ Le site tourne mais la base est vide. Il faut exécuter le **seed** **une fois**
 
 ---
 
-## 6. Vérifier que tout marche sur Vercel
+## 7. Vérifier que tout marche sur Vercel
 
 1. Ouvre l’URL de ton déploiement (ex: **https://projet-smile-xxx.vercel.app**).
 2. Vérifie :
@@ -91,7 +102,7 @@ Si une page affiche une erreur, ouvre la console du navigateur (F12) et note le 
 
 ---
 
-## 7. Après la première fois
+## 8. Après la première fois
 
 - Chaque **push sur `main`** déclenche un nouveau déploiement sur Vercel.
 - Les variables (ex: `DATABASE_URL`) sont déjà enregistrées ; pas besoin de les ressaisir.
@@ -104,9 +115,10 @@ Si une page affiche une erreur, ouvre la console du navigateur (F12) et note le 
 | Étape | Où | Action |
 |-------|-----|--------|
 | 1 | GitHub | Push du code (main) |
-| 2–3 | Vercel | Import du repo + ajout de `DATABASE_URL` (et optionnellement `NEXT_PUBLIC_SITE_URL`) |
-| 4 | Vercel | Deploy |
-| 5 | En local (une fois) | `npm run prisma:seed` avec `DATABASE_URL` = celle de Vercel/Neon |
-| 6 | Navigateur | Tester l’URL Vercel (/, /gallery, /artistes, /admin/login) |
+| 2 | Neon | Créer projet + base, copier l’URL **pooled** |
+| 3–4 | Vercel | Import du repo + `DATABASE_URL` (URL Neon pooled) + `NEXT_PUBLIC_SITE_URL` |
+| 5 | Vercel | Deploy |
+| 6 | En local (une fois) | `npm run prisma:seed` avec la même `DATABASE_URL` (Neon) |
+| 7 | Navigateur | Tester l’URL Vercel (/, /gallery, /artistes, /admin/login) |
 
 Tout le site est alors sur **Vercel** ; tu n’as plus besoin que ça tourne sur `localhost` pour le voir.

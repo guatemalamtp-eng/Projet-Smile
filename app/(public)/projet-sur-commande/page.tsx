@@ -9,14 +9,16 @@ export const metadata = {
 
 export const dynamic = 'force-dynamic';
 
-type Props = { searchParams: Promise<{ creator?: string; service?: string }> };
+type Props = { searchParams: Promise<{ creator?: string; service?: string }> | { creator?: string; service?: string } };
 
 export default async function ProjetSurCommandePage({ searchParams }: Props) {
-  const { creator: creatorIdParam, service: serviceIdParam } = await searchParams;
+  const resolved = await Promise.resolve(searchParams);
+  const creatorIdParam = resolved?.creator;
+  const serviceIdParam = resolved?.service;
 
   const [creators, services] = await Promise.all([
     prisma.user.findMany({
-      where: { role: 'CREATOR', creatorProfile: { isPublic: true } },
+      where: { creatorProfile: { isPublic: true } },
       select: { id: true, name: true, email: true },
       orderBy: { name: 'asc' },
     }),

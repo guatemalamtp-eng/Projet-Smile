@@ -47,10 +47,12 @@ export async function sendMessageForArtwork(formData: FormData) {
   const name = String(formData.get('name') ?? '').trim() || undefined;
   const content = String(formData.get('content') ?? '').trim();
   const artworkId = String(formData.get('artworkId') ?? '').trim() || undefined;
+  const slug = String(formData.get('slug') ?? '').trim() || undefined;
+  const backUrl = slug ? `/artworks/${slug}` : '/gallery';
 
   if (!email || !content) {
     redirectWithToast(
-      artworkId ? `/artworks/${artworkId}` : '/gallery',
+      backUrl,
       'Veuillez remplir tous les champs requis',
       'error',
     );
@@ -66,13 +68,13 @@ export async function sendMessageForArtwork(formData: FormData) {
     });
 
     redirectWithToast(
-      artworkId ? `/artworks/${artworkId}` : '/gallery',
+      backUrl,
       'Message envoyé avec succès ! L’artiste vous répondra bientôt.',
       'success',
     );
   } catch (error) {
     redirectWithToast(
-      artworkId ? `/artworks/${artworkId}` : '/gallery',
+      backUrl,
       'Erreur lors de l’envoi du message. Veuillez réessayer.',
       'error',
     );

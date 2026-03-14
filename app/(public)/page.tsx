@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getFeaturedArtworkOfTheDay } from '@/lib/artworks';
 import { prisma } from '@/lib/prisma';
+import { FeaturedArtwork } from '@/components/home/FeaturedArtwork';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,39 +54,23 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="relative h-[320px] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/60 shadow-[0_0_80px_rgba(56,189,248,0.15)]">
-          {featured ? (
-            <Link
-              href={`/artworks/${featured.slug}`}
-              className="block h-full w-full bg-neutral-900/60"
-            >
-              <img
-                src={featured.imageUrl}
-                alt={featured.title}
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-                <p className="text-sm font-medium text-white">{featured.title}</p>
-                {featured.artist?.name && (
-                  <p className="text-xs text-neutral-300">
-                    {featured.artist.name}
-                  </p>
-                )}
-              </div>
-            </Link>
+        {featured ? (
+            <FeaturedArtwork
+              slug={featured.slug}
+              title={featured.title}
+              imageUrl={featured.imageUrl}
+              artistName={featured.artist?.name}
+            />
           ) : (
-            <>
+            <div className="relative h-[320px] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/60 shadow-[0_0_80px_rgba(56,189,248,0.15)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,#22d3ee33,transparent),radial-gradient(circle_at_100%_100%,#f472b633,transparent)]" />
               <div className="relative flex h-full items-center justify-center">
                 <span className="text-[11px] uppercase tracking-[0.3em] text-neutral-200">
                   Une toile, une histoire
                 </span>
               </div>
-            </>
+            </div>
           )}
-        </div>
       </div>
 
       {artists.length > 0 && (

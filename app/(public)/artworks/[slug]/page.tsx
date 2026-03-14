@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { getArtworkBySlug } from '@/lib/artworks';
 import { likeArtwork } from './server-actions';
 import { ContactForm } from '@/components/forms/ContactForm';
+import { ArtworkImage } from '@/components/artworks/ArtworkImage';
 
 type ArtworkPageProps = {
   params: Promise<{ slug: string }>;
@@ -50,6 +51,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
     title,
     description,
     imageUrl,
+    galleryUrls,
     status,
     widthCm,
     heightCm,
@@ -59,23 +61,29 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
   } = artwork;
 
   const isSold = status === 'SOLD';
+  const extraPhotos = Array.isArray(galleryUrls) ? galleryUrls : [];
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
       <div className="grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-white/10 bg-neutral-950/60">
-          <img
-            src={imageUrl}
-            alt={title}
-            className={`h-full w-full object-contain ${
-              isSold ? 'grayscale' : ''
-            }`}
-            loading="eager"
-          />
+        <div className="relative space-y-4">
+          <ArtworkImage imageUrl={imageUrl} title={title} isSold={isSold} />
           {isSold && (
-            <span className="absolute left-4 top-4 rounded-full bg-red-600/90 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+            <span className="absolute left-4 top-4 rounded-full bg-red-600/90 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white z-10">
               Vendu
             </span>
+          )}
+          {extraPhotos.length > 0 && (
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-wider text-neutral-500">Autres vues</p>
+              <ul className="flex gap-2 flex-wrap">
+                {extraPhotos.map((url, i) => (
+                  <li key={i} className="w-24 h-24 rounded-lg overflow-hidden border border-white/10 bg-neutral-900/60 shrink-0">
+                    <img src={url} alt={`${title} vue ${i + 2}`} className="w-full h-full object-cover" loading="lazy" />
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
 
@@ -139,7 +147,7 @@ export default async function ArtworkPage({ params }: ArtworkPageProps) {
               </button>
             </form>
 
-            <ContactForm artworkId={id} />
+            <ContactForm artworkId={id} slug={artwork.slug} />
           </div>
         </section>
       </div>

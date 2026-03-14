@@ -61,6 +61,7 @@ export async function getArtworkBySlug(slug: string) {
       title: true,
       slug: true,
       imageUrl: true,
+      galleryUrls: true,
       description: true,
       status: true,
       widthCm: true,

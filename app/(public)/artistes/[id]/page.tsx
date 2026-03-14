@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { ArtistAvatar } from '@/components/artistes/ArtistAvatar';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,13 +63,13 @@ export default async function ArtistePage({ params }: Props) {
       </nav>
       <div className="flex flex-col gap-8 md:flex-row md:items-start">
         {profile?.avatarUrl ? (
-          <img
-            src={profile.avatarUrl.startsWith('http') ? profile.avatarUrl : profile.avatarUrl}
-            alt={`${creator.name || creator.email}`}
-            className="h-56 w-56 shrink-0 rounded-xl object-cover border border-white/10"
+          <ArtistAvatar
+            avatarUrl={profile.avatarUrl}
+            name={creator.name}
+            email={creator.email}
           />
         ) : (
-          <div className="flex h-56 w-56 shrink-0 items-center justify-center rounded-xl bg-white/5 text-6xl text-neutral-600">
+          <div className="flex h-56 w-56 shrink-0 items-center justify-center rounded-xl bg-white/5 text-6xl text-neutral-600 border border-white/10">
             {creator.name?.[0] ?? creator.email[0].toUpperCase()}
           </div>
         )}

@@ -43,6 +43,7 @@ model Artwork {
   technique   String?
   status      ArtworkStatus  @default(AVAILABLE)
   imageUrl    String
+  galleryUrls String[]       @default([])  // photos supplémentaires de l'œuvre
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 

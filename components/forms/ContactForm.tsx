@@ -5,9 +5,10 @@ import { sendMessageForArtwork } from '@/app/(public)/artworks/[slug]/server-act
 
 type ContactFormProps = {
   artworkId: string;
+  slug: string;
 };
 
-export function ContactForm({ artworkId }: ContactFormProps) {
+export function ContactForm({ artworkId, slug }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (formData: FormData) => {
@@ -30,6 +31,7 @@ export function ContactForm({ artworkId }: ContactFormProps) {
   return (
     <form action={handleSubmit} className="space-y-3 rounded-xl border border-white/10 bg-black/40 p-4">
       <input type="hidden" name="artworkId" value={artworkId} />
+      <input type="hidden" name="slug" value={slug} />
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-neutral-400">
         Contacter l'artiste
       </p>
